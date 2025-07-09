@@ -1,5 +1,5 @@
 {
-  "name": "demo-project-gantt",
+  "name": "project-gantt",
   "displayName": "Project Management",
   "description": "A project management component with a table and a gantt chart.",
   "version": "18.1.0",

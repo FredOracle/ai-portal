@@ -51,7 +51,7 @@ define(["require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydatapro
             this.connected = () => {
                 // accUtils.announce('Dashboard page loaded.', 'assertive');
                 document.title = "Dashboard";
-                self.loadData();
+                // self.loadData();
                 console.log("----------------connected")
                 // Implement further logic if needed
             };

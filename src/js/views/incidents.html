@@ -7,12 +7,11 @@
   <h1>Incidents Content Area</h1>
 
 
-    <div id="sampleDemo" class="demo-padding demo-container">
-        <div id="componentDemoContent" style="width: 800px; min-width: 100%;">
+        <div id="componentDemoContent" style="width: 100%; min-width: 100%;">
 
             <!-- All attributes here are mandatory in this sample web component.  Also,
                 note the last column is hidden and intended to be used by screen reader only. -->
-            <demo-project-gantt
+            <project-gantt
                     id="component-container"
                     class="demo-gantt-container"
                     row-data="[[rowsDataProvider]]"
@@ -76,12 +75,12 @@
                             successor-task-id="[[dependency.data.successor]]"
                             type="[[dependency.data.type]]"></oj-gantt-dependency>
                 </template>
-            </demo-project-gantt>
+            </project-gantt>
 
 
 
         </div>
-    </div>
+
 
 
 </div>
