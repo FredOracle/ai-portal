@@ -1,0 +1,87 @@
+<!--
+ Copyright (c) 2014, 2025, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-hybrid-padding">
+  <h1>Incidents Content Area</h1>
+
+
+    <div id="sampleDemo" class="demo-padding demo-container">
+        <div id="componentDemoContent" style="width: 800px; min-width: 100%;">
+
+            <!-- All attributes here are mandatory in this sample web component.  Also,
+                note the last column is hidden and intended to be used by screen reader only. -->
+            <demo-project-gantt
+                    id="component-container"
+                    class="demo-gantt-container"
+                    row-data="[[rowsDataProvider]]"
+                    dependency-data="[[dependenciesDataProvider]]"
+                    start="[[projectStartDate]]"
+                    end="[[projectEndDate]]"
+                    viewport-start="[[viewportStartDate]]"
+                    viewport-end="[[viewportEndDate]]"
+                    gridlines.vertical="visible"
+                    expanded="{{expanded}}"
+                    major-axis.scale="quarters"
+                    major-axis.zoom-order='["quarters", "months", "weeks", "days"]'
+                    minor-axis.scale="months"
+                    minor-axis.zoom-order='["quarters", "months", "weeks", "days"]'
+                    reference-objects="[[currentDateReference]]"
+                    columns='[
+                {"headerText": "项目"},
+                {"headerText": "开始日期"},
+                {"headerText": "结束日期"},
+                {"headerText": "Additional Task Info",
+                 "headerClassName": "oj-helper-hidden-accessible",
+                 "headerStyle": "padding:0",
+                 "className": "oj-helper-hidden-accessible",
+                 "style": "padding:0"}
+              ]'>
+                <template slot="tableRowTemplate" data-oj-as="row">
+                    <tr>
+                        <td>
+                            <oj-row-expander context="[[row]]"></oj-row-expander>
+                            <span><oj-bind-text value="[[row.item.data.tasks[0].label]]"></oj-bind-text></span>
+                        </td>
+                        <td>
+                  <span>
+                    <oj-bind-text
+                            value="[[dateConverter.format(row.item.data.tasks[0].start)]]"></oj-bind-text>
+                  </span>
+                        </td>
+                        <td>
+                  <span>
+                    <oj-bind-text value="[[dateConverter.format(row.item.data.tasks[0].end)]]"></oj-bind-text>
+                  </span>
+                        </td>
+                        <td aria-label="Accessible information about the row goes here"></td>
+                    </tr>
+                </template>
+                <template slot="ganttRowTemplate" data-oj-as="row">
+                    <oj-gantt-row tasks="[[row.data.tasks]]"></oj-gantt-row>
+                </template>
+                <template slot="ganttTaskTemplate" data-oj-as="task">
+                    <oj-gantt-task
+                            task-id="[[task.data.id]]"
+                            start="[[task.data.start]]"
+                            end="[[task.data.end]]"
+                            label="[[task.data.name]]"
+                            progress.value="[[task.data.progress]]"
+                            type="[[task.rowData.subTasks ? 'summary' : 'auto']]"></oj-gantt-task>
+                </template>
+                <template slot="ganttDependencyTemplate" data-oj-as="dependency">
+                    <oj-gantt-dependency
+                            predecessor-task-id="[[dependency.data.predecessor]]"
+                            successor-task-id="[[dependency.data.successor]]"
+                            type="[[dependency.data.type]]"></oj-gantt-dependency>
+                </template>
+            </demo-project-gantt>
+
+
+
+        </div>
+    </div>
+
+
+</div>

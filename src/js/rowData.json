@@ -1,0 +1,335 @@
+[
+  {
+    "id": "design",
+    "tasks": [
+      {
+        "id": "design",
+        "label": "设计阶段",
+        "name": "产品规划",
+        "progress": 1,
+        "type": "summary",
+        "start": "2016-01-03T00:00:00.000Z",
+        "end": "2016-02-02T00:00:00.000Z",
+        "plannedStart": "2016-01-03T00:00:00.000Z",
+        "plannedFinish": "2016-01-31T00:00:00.000Z"
+      }
+    ],
+    "subTasks": [
+      {
+        "id": "pm1",
+        "tasks": [
+          {
+            "id": "pm1",
+            "label": "需求1",
+            "name": "项目经理",
+            "progress": 1,
+            "start": "2016-01-03T00:00:00.000Z",
+            "end": "2016-01-13T00:00:00.000Z",
+            "plannedStart": "2016-01-03T00:00:00.000Z",
+            "plannedFinish": "2016-01-10T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "pm2",
+        "tasks": [
+          {
+            "id": "pm2",
+            "label": "需求 2",
+            "name": "项目经理",
+            "progress": 1,
+            "start": "2016-01-13T00:00:00.000Z",
+            "end": "2016-01-17T00:00:00.000Z",
+            "plannedStart": "2016-01-10T00:00:00.000Z",
+            "plannedFinish": "2016-01-17T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "pm3",
+        "tasks": [
+          {
+            "id": "pm3",
+            "label": "需求澄清",
+            "start": "2016-01-17T00:00:00.000Z",
+            "end": "2016-01-17T00:00:00.000Z",
+            "plannedStart": "2016-01-17T00:00:00.000Z",
+            "plannedFinish": "2016-01-17T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "ad1",
+        "tasks": [
+          {
+            "id": "ad1",
+            "label": "架构设计",
+            "name": "架构师&研发组长",
+            "progress": 1,
+            "start": "2016-01-19T00:00:00.000Z",
+            "end": "2016-02-02T00:00:00.000Z",
+            "plannedStart": "2016-01-17T00:00:00.000Z",
+            "plannedFinish": "2016-01-31T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "ad2",
+        "tasks": [
+          {
+            "id": "ad2",
+            "label": "设计评审",
+            "start": "2016-02-02T00:00:00.000Z",
+            "end": "2016-02-02T00:00:00.000Z",
+            "plannedStart": "2016-01-31T00:00:00.000Z",
+            "plannedFinish": "2016-01-31T00:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dev",
+    "tasks": [
+      {
+        "id": "dev",
+        "label": "开发阶段",
+        "name": "研发团队",
+        "progress": 0.43,
+        "type": "summary",
+        "start": "2016-02-02T00:00:00.000Z",
+        "end": "2016-03-18T00:00:00.000Z",
+        "plannedStart": "2016-01-31T00:00:00.000Z",
+        "plannedFinish": "2016-03-18T00:00:00.000Z"
+      }
+    ],
+    "subTasks": [
+      {
+        "id": "dev1",
+        "tasks": [
+          {
+            "id": "dev1",
+            "label": "详细设计评审",
+            "name": "李帅",
+            "progress": 1,
+            "start": "2016-02-02T00:00:00.000Z",
+            "end": "2016-02-05T00:00:00.000Z",
+            "plannedStart": "2016-01-31T00:00:00.000Z",
+            "plannedFinish": "2016-02-03T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "dev2",
+        "tasks": [
+          {
+            "id": "dev2",
+            "label": "模块一开发",
+            "name": "马伟",
+            "progress": 0.75,
+            "start": "2016-02-05T00:00:00.000Z",
+            "end": "2016-02-27T00:00:00.000Z",
+            "plannedStart": "2016-02-03T00:00:00.000Z",
+            "plannedFinish": "2016-02-27T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "dev3",
+        "tasks": [
+          {
+            "id": "dev3",
+            "label": "模块二开发",
+            "name": "毕权忠",
+            "progress": 0,
+            "start": "2016-02-27T00:00:00.000Z",
+            "end": "2016-03-15T00:00:00.000Z",
+            "plannedStart": "2016-02-27T00:00:00.000Z",
+            "plannedFinish": "2016-03-15T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "dev4",
+        "tasks": [
+          {
+            "id": "dev4",
+            "label": "代码审核",
+            "name": "毕尚",
+            "progress": 0,
+            "start": "2016-03-15T00:00:00.000Z",
+            "end": "2016-03-18T00:00:00.000Z",
+            "plannedStart": "2016-03-15T00:00:00.000Z",
+            "plannedFinish": "2016-03-18T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "dev5",
+        "tasks": [
+          {
+            "id": "dev5",
+            "label": "集成测试",
+            "start": "2016-03-18T00:00:00.000Z",
+            "end": "2016-03-18T00:00:00.000Z",
+            "finish": "2016-03-18T00:00:00.000Z",
+            "plannedStart": "2016-03-18T00:00:00.000Z",
+            "plannedFinish": "2016-03-18T00:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "production",
+    "tasks": [
+      {
+        "id": "production",
+        "label": "产品发布",
+        "name": "Delivery Team",
+        "progress": 0.08,
+        "type": "summary",
+        "start": "2016-02-02T00:00:00.000Z",
+        "end": "2016-07-25T00:00:00.000Z",
+        "plannedStart": "2016-01-31T00:00:00.000Z",
+        "plannedFinish": "2016-07-25T00:00:00.000Z"
+      }
+    ],
+    "subTasks": [
+      {
+        "id": "doc1",
+        "tasks": [
+          {
+            "id": "doc1",
+            "label": "文档编写",
+            "name": "Communicator",
+            "progress": 0.25,
+            "start": "2016-02-02T00:00:00.000Z",
+            "end": "2016-03-05T00:00:00.000Z",
+            "plannedStart": "2016-01-31T00:00:00.000Z",
+            "plannedFinish": "2016-03-05T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "qa",
+        "tasks": [
+          {
+            "id": "qa",
+            "label": "版本提测",
+            "name": "QA团队",
+            "progress": 0.184,
+            "type": "summary",
+            "start": "2016-02-02T00:00:00.000Z",
+            "end": "2016-04-18T00:00:00.000Z",
+            "plannedStart": "2016-01-31T00:00:00.000Z",
+            "plannedFinish": "2016-04-18T00:00:00.000Z"
+          }
+        ],
+        "subTasks": [
+          {
+            "id": "test1",
+            "tasks": [
+              {
+                "id": "test1",
+                "label": "第一轮提测",
+                "name": "赵显峰",
+                "progress": 0.5,
+                "start": "2016-02-02T00:00:00.000Z",
+                "end": "2016-03-01T00:00:00.000Z",
+                "plannedStart": "2016-01-31T00:00:00.000Z",
+                "plannedFinish": "2016-03-01T00:00:00.000Z"
+              }
+            ]
+          },
+          {
+            "id": "test2",
+            "tasks": [
+              {
+                "id": "test2",
+                "label": "第二轮提测",
+                "name": "陈小平",
+                "progress": 0,
+                "start": "2016-03-18T00:00:00.000Z",
+                "end": "2016-04-18T00:00:00.000Z",
+                "plannedStart": "2016-03-18T00:00:00.000Z",
+                "plannedFinish": "2016-04-18T00:00:00.000Z"
+              }
+            ]
+          },
+          {
+            "id": "test3",
+            "tasks": [
+              {
+                "id": "test3",
+                "label": "测试报告及评审",
+                "start": "2016-04-18T00:00:00.000Z",
+                "end": "2016-04-18T00:00:00.000Z",
+                "plannedStart": "2016-04-18T00:00:00.000Z",
+                "plannedFinish": "2016-04-18T00:00:00.000Z"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "test4",
+        "tasks": [
+          {
+            "id": "test4",
+            "label": "Pilot",
+            "name": "盛伟",
+            "progress": 0,
+            "start": "2016-04-30T00:00:00.000Z",
+            "end": "2016-06-18T00:00:00.000Z",
+            "plannedStart": "2016-04-30T00:00:00.000Z",
+            "plannedFinish": "2016-06-18T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "test5",
+        "tasks": [
+          {
+            "id": "test5",
+            "label": "Beta",
+            "name": "李正康",
+            "progress": 0,
+            "start": "2016-06-20T00:00:00.000Z",
+            "end": "2016-07-18T00:00:00.000Z",
+            "plannedStart": "2016-06-20T00:00:00.000Z",
+            "plannedFinish": "2016-07-18T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "deploy1",
+        "tasks": [
+          {
+            "id": "deploy1",
+            "label": "Deployment",
+            "name": "Deployment Team",
+            "progress": 0,
+            "start": "2016-07-20T00:00:00.000Z",
+            "end": "2016-07-25T00:00:00.000Z",
+            "plannedStart": "2016-07-20T00:00:00.000Z",
+            "plannedFinish": "2016-07-25T00:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "deploy2",
+        "tasks": [
+          {
+            "id": "deploy2",
+            "label": "Deployment Complete",
+            "start": "2016-07-25T00:00:00.000Z",
+            "end": "2016-07-25T00:00:00.000Z",
+            "plannedStart": "2016-07-25T00:00:00.000Z",
+            "plannedFinish": "2016-07-25T00:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,21 @@
+<!--
+ Copyright (c) 2014, 2025, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-hybrid-padding">
+  <h1>Dashboard Content Area</h1>
+  <div>
+
+      <oj-table
+              id="table"
+              aria-label="Departments Table"
+              accessibility.row-header="depName"
+              data="[[dataproviderView]]"
+              scroll-policy="loadMoreOnScroll"
+              scroll-policy-options='{"fetchSize": 10}'
+              columns='[[columnArray]]'
+              class="demo-table-container"></oj-table>
+
+  </div>
+</div>
