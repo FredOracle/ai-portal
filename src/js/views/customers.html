@@ -5,7 +5,53 @@
  -->
 <div class="oj-hybrid-padding">
   <h1>Customers Content Area</h1>
-  <div>
-      To change the content of this section, you will make edits to the customers.html file located in the /js/views folder.
-  </div>
-</div>
+    <div id="sampleDemo" class="demo-padding demo-container">
+        <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+
+            <div id="gantt-container">
+                <div class="oj-panel oj-bg-info-30 oj-sm-margin-4x-bottom">
+                    <h2 id="h1" class="oj-typography-subheading-md">Options To Control The Gantt Below</h2>
+
+                </div>
+
+                <oj-gantt
+                        id="gantt"
+                        aria-label="Gantt with draggable tasks"
+                        drag-mode="[[dragModeValue]]"
+                        start="[[projectStartDate]]"
+                        end="[[projectEndDate]]"
+                        viewport-start="[[viewportStart]]"
+                        viewport-end="[[viewportEnd]]"
+                        gridlines.vertical="visible"
+                        major-axis.scale="days"
+                        major-axis.zoom-order='["months", "weeks", "days","hours"]'
+                        minor-axis.scale="hours"
+                        minor-axis.zoom-order='["weeks", "days","hours","minutes"]'
+                        row-axis.rendered="on"
+                        row-data="[[dataProvider]]"
+                        selection-mode="multiple"
+                        dnd.move.tasks="enabled"
+                        on-oj-move="[[handleMove]]"
+                        task-defaults.resizable="enabled"
+                        task-defaults.label-position="innerCenter"
+                        task-defaults.border-radius="5"
+                        task-defaults.height="50"
+                        on-oj-resize="[[handleResize]]"
+                        class="demo-gantt">
+                    <template slot="rowMappingTemplate" data-oj-as="row">
+                        <oj-gantt-row label="[[row.data.resource]]" tasks="[[row.data.tasks]]"></oj-gantt-row>
+                    </template>
+                    <template slot="taskMappingTemplate" data-oj-as="task">
+                        <oj-gantt-task
+                                task-id="[[task.data.id]]"
+                                start="[[task.data.begin]]"
+                                end="[[task.data.finish]]"
+                                label="[[task.data.name + ': '+ task.data.user]]"></oj-gantt-task>
+                    </template>
+                </oj-gantt>
+            </div>
+
+
+
+        </div>
+    </div>

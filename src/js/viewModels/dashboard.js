@@ -9,8 +9,8 @@
  * Your dashboard ViewModel code goes here
  *  "require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider", "text!../cookbook/dataCollections/table/shared/departmentData.json", "ojs/ojtable", "ojs/ojknockout"
  */
-define(["require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", "ojs/ojtable", "ojs/ojknockout"],
-    function (require, exports, ko, ojbootstrap_1, ArrayDataProvider, ListDataProviderView) {
+define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", "ojs/ojtable", "ojs/ojknockout"],
+    function (accUtils, require, exports, ko, ojbootstrap_1, ArrayDataProvider, ListDataProviderView) {
         function DashboardViewModel() {
             // Below are a set of the ViewModel methods invoked by the oj-module component.
             // Please reference the oj-module jsDoc for additional information
@@ -18,7 +18,7 @@ define(["require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydatapro
             self.serviceUrl = "http://localhost:3000/departments";
             self.columnArray = [
                 {headerText: 'Department Id',  field: 'DepartmentId', id:'deptId'},
-                {headerText: 'Department Name', field: 'DepartmentName'},
+                {headerText: 'User Name', field: 'DepartmentName'},
                 {headerText: 'Location Id', field: 'LocationId', id:'locId'},
                 {headerText: 'Manager Id', field: 'ManagerId', id:'mgrId'}
             ];
@@ -49,9 +49,9 @@ define(["require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydatapro
              * after being disconnected.
              */
             this.connected = () => {
-                // accUtils.announce('Dashboard page loaded.', 'assertive');
+                accUtils.announce('Dashboard page loaded.', 'assertive');
                 document.title = "Dashboard";
-                // self.loadData();
+                self.loadData();
                 console.log("----------------connected")
                 // Implement further logic if needed
             };
