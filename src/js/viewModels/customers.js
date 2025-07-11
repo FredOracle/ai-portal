@@ -8,19 +8,22 @@
 /*
  * Your customer ViewModel code goes here
  */
-define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "text!/js/customersRowData.json", "ojs/ojarraydataprovider", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojformlayout"],
-    function (accUtils,require, exports, ko, ojbootstrap_1, data, ArrayDataProvider) {
+define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojformlayout"],
+    function (accUtils,require, exports, ko, ojbootstrap_1, ArrayDataProvider) {
         function CustomerViewModel() {
             // Below are a set of the ViewModel methods invoked by the oj-module component.
             // Please reference the oj-module jsDoc for additional information.
             var self = this;
 
-            self.projectStartDate = '2021-01-04T07:00:00.000';
-            self.projectEndDate = '2021-01-06T18:00:00.000';
+            self.projectStartDate = '2025-07-01';
+            self.projectEndDate = '2025-10-01';
             self.viewportStart = '2021-01-04T01:00:00.000';
             self.viewportEnd = '2021-01-04T13:00:00.000';
+
+
+
             self.dragModeValue = ko.observable('pan');
-            self.rowData = ko.observableArray(JSON.parse(data));
+            self.rowData = ko.observableArray([]);
             self.dataProvider = new ArrayDataProvider(this.rowData, {
                 keyAttributes: 'resource'
             });
@@ -86,6 +89,17 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "tex
             }
 
 
+            self.serviceUrl = "http://localhost:3000/tasks";
+            self.loadData = function () {
+                fetch(self.serviceUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        self.rowData(data);
+                    });
+            }
+
+
             /**
              * Optional ViewModel method invoked after the View is inserted into the
              * document DOM.  The application can put logic that requires the DOM being
@@ -98,6 +112,7 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "tex
                 accUtils.announce('Customers page loaded.', 'assertive');
                 document.title = "Customers";
                 // Implement further logic if needed
+                self.loadData();
             };
 
             /**

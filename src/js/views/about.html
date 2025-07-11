@@ -8,4 +8,132 @@
   <div>
       To change the content of this section, you will make edits to the about.html file located in the /js/views folder.
   </div>
+    <div id="sampleDemo" class="demo-padding demo-container">
+        <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+
+            <div id="container">
+                <div class="oj-panel oj-bg-info-30 oj-sm-margin-4x-bottom">
+                    <h2 id="h1" class="oj-typography-subheading-md">Options To Control The Gantt Below</h2>
+                    <oj-form-layout user-assistance-density="reflow" max-columns="1" direction="row">
+                        <oj-checkboxset
+                                id="task-elements"
+                                class="oj-choice-direction-row"
+                                label-hint="Task elements to show"
+                                value="[[taskElementsDetails]]"
+                                on-value-changed="[[handleTaskElementsSettings]]">
+                            <oj-option value="attribute">Attribute</oj-option>
+                            <oj-option value="overtime">Overtime</oj-option>
+                            <oj-option value="downtime">Downtime</oj-option>
+                        </oj-checkboxset>
+                        <oj-checkboxset
+                                id="toggles"
+                                class="oj-choice-direction-row"
+                                label-hint="Controls"
+                                value="[[togglesDetails]]"
+                                on-value-changed="[[handleTogglesSettings]]">
+                            <oj-option value="timeCursor">Time Cursor</oj-option>
+                            <oj-option value="zooming">Zooming</oj-option>
+                        </oj-checkboxset>
+                    </oj-form-layout>
+                </div>
+
+                <oj-gantt
+                        id="gantt"
+                        start="[[projectStartDate.toISOString()]]"
+                        end="[[projectEndDate.toISOString()]]"
+                        viewport-start="[[viewportStart.toISOString()]]"
+                        viewport-end="[[viewportEnd.toISOString()]]"
+                        gridlines.vertical="visible"
+                        expanded="{{expanded}}"
+                        zooming="[[zooming]]"
+                        time-cursor="[[timeCursor]]"
+                        row-axis.rendered="on"
+                        row-axis.width="210px"
+                        major-axis.scale="days"
+                        major-axis.converter.days="[[dateConverter]]"
+                        major-axis.zoom-order='[[ ["weeks","days",custom8HrScale,"hours"] ]]'
+                        minor-axis.scale="[[custom8HrScale]]"
+                        minor-axis.zoom-order='[[ ["weeks","days",custom8HrScale,"hours"] ]]'
+                        selection-mode="multiple"
+                        selection-behavior="highlightDependencies"
+                        dnd.move.tasks="enabled"
+                        on-oj-move="[[handleMove]]"
+                        task-defaults.resizable="enabled"
+                        on-oj-resize="[[handleResize]]"
+                        task-aggregation="on"
+                        dependency-line-shape="straight"
+                        reference-objects="[[referenceObjects]]"
+                        row-data="[[dataProvider]]"
+                        dependency-data="[[dependenciesDataProvider]]"
+                        :aria-label='[["Gantt Chart. Current date is " + currentDateFormatted ]]'
+                        class="demo-gantt">
+                    <template slot="rowMappingTemplate" data-oj-as="row">
+                        <oj-gantt-row
+                                reference-objects="[[row.data.referenceObjects]]"
+                                tasks="[[row.data.tasks]]"
+                                label="[[row.data.label]]"
+                                short-desc="[[getRowDesc(row)]]"></oj-gantt-row>
+                    </template>
+                    <template slot="taskMappingTemplate" data-oj-as="task">
+                        <oj-gantt-task
+                                task-id="[[task.data.id]]"
+                                start="[[task.data.start]]"
+                                end="[[task.data.end]]"
+                                height="[[task.data.svgClassName === 'demo-gantt-task-hold' ? 12 : null]]"
+                                border-radius="[[task.data.svgClassName === 'demo-gantt-task-hold' ? '0' : null]]"
+                                attribute.rendered="[[!showAttribute() || task.data.svgClassName === 'demo-gantt-task-hold' ? 'off' : 'on']]"
+                                attribute.short-desc="Attribute Description"
+                                downtime.start="[[showDowntime() ? task.data.downtimeStart : null]]"
+                                downtime.end="[[showDowntime() ? task.data.downtimeEnd : null]]"
+                                overtime.start="[[showOvertime() ? task.data.overtimeStart : null]]"
+                                overtime.end="[[showOvertime() ? task.data.overtimeEnd : null]]"
+                                svg-class-name="[[task.data.svgClassName]]"></oj-gantt-task>
+                    </template>
+                    <template slot="dependencyTemplate" data-oj-as="dependency">
+                        <oj-gantt-dependency
+                                predecessor-task-id="[[dependency.data.predecessor]]"
+                                successor-task-id="[[dependency.data.successor]]"></oj-gantt-dependency>
+                    </template>
+                    <template slot="referenceObjectMappingTemplate" data-oj-as="ref">
+                        <oj-gantt-reference-object
+                                start="[[ref.data.start]]"
+                                end="[[ref.data.end]]"></oj-gantt-reference-object>
+                    </template>
+                    <template slot="rowAxisLabelTemplate" data-oj-as="rowAxisLabel">
+                        <svg class="demo-gantt-row-label">
+                            <foreignObject
+                                    :x="[[getRowLabelX(rowAxisLabel.maxWidth)]]"
+                                    y="0"
+                                    :width="[[rowAxisLabel.maxWidth]]"
+                                    :height="[[rowAxisLabel.maxHeight]]">
+                                <div class="oj-flex oj-sm-align-items-center demo-full-size">
+                      <span :class='[[ {"oj-typography-semi-bold": !rowAxisLabel.leaf} ]]'>
+                        <oj-bind-text value="[[rowAxisLabel.rowData.label]]"></oj-bind-text>
+                      </span>
+                                    <oj-bind-if test="[[!rowAxisLabel.leaf && !expanded().has(rowAxisLabel.rowData.id)]]">
+                        <span class="oj-badge oj-badge-success oj-badge-subtle oj-sm-margin-2x-start">
+                          <oj-bind-text value="[['+' + rowAxisLabel.data.rows.length]]"></oj-bind-text>
+                        </span>
+                                    </oj-bind-if>
+                                    <oj-bind-if test="[[!rowAxisLabel.leaf]]">
+                        <span
+                                class="oj-icon-color-danger oj-ux-ico-triangle-up-s oj-ux-icon-size-2x oj-sm-margin-2x-start"></span>
+                                    </oj-bind-if>
+                                </div>
+                            </foreignObject>
+                        </svg>
+                    </template>
+                </oj-gantt>
+                <br />
+                <p>
+                    Task Action:
+                    <span id="results" class="italic oj-typography-body-md">
+                <oj-bind-text value="[[dndAction]]"></oj-bind-text>
+              </span>
+                </p>
+            </div>
+
+
+        </div>
+    </div>
 </div>
