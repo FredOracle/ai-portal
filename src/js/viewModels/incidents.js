@@ -8,7 +8,7 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(['../accUtils',"require", "exports", "knockout", "ojs/ojbootstrap", "text!/js/rowData.json", "text!/js/depData.json", "ojs/ojarraydataprovider", "ojs/ojarraytreedataprovider", "ojs/ojconverter-datetime", "ojs/ojconverterutils-i18n", "ojs/ojknockout-keyset", "ojs/ojknockout", "ojs/ojrowexpander", "jet-composites/project-gantt/loader"],
+define(['../accUtils',"require", "exports", "knockout", "ojs/ojbootstrap", "text!/js/mock/incidents/rowData.json", "text!/js/mock/incidents/depData.json", "ojs/ojarraydataprovider", "ojs/ojarraytreedataprovider", "ojs/ojconverter-datetime", "ojs/ojconverterutils-i18n", "ojs/ojknockout-keyset", "ojs/ojknockout", "ojs/ojrowexpander", "jet-composites/project-gantt/loader"],
  function(accUtils,require, exports, ko, ojbootstrap_1, rowData, depData, ArrayDataProvider, ArrayTreeDataProvider, ojconverter_datetime_1, ojconverterutils_i18n_1, ojknockout_keyset_1) {
     function IncidentsViewModel() {
       // Below are a set of the ViewModel methods invoked by the oj-module component.

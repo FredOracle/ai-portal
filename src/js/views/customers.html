@@ -13,21 +13,72 @@
                     <h2 id="h1" class="oj-typography-subheading-md">Options To Control The Gantt Below</h2>
                 </div>
 
+<!--                <oj-gantt-->
+<!--                        id="gantt"-->
+<!--                        start="[[projectStartDate.toISOString()]]"-->
+<!--                        end="[[projectEndDate.toISOString()]]"-->
+<!--                        gridlines.vertical="visible"-->
+<!--                        major-axis.scale="days"-->
+<!--                        major-axis.zoom-order='[[ ["weeks","days",custom8HrScale,"hours"] ]]'-->
+<!--                        minor-axis.scale="[[custom8HrScale]]"-->
+<!--                        minor-axis.zoom-order='[[ ["weeks","days",custom8HrScale,"hours"] ]]'-->
+<!--                        row-axis.rendered="on"-->
+<!--                        selection-mode="single"-->
+<!--                        reference-objects="[[referenceObjects]]"-->
+<!--                        viewport-start="[[viewportStart.toISOString()]]"-->
+<!--                        viewport-end="[[viewportEnd.toISOString()]]"-->
+<!--                        row-data="[[dataProvider]]"-->
+<!--                        :aria-label='[["Gantt Chart. Current date is " + currentDateFormatted ]]'-->
+<!--                        class="demo-gantt"-->
+<!--                        task-defaults.label-position="end">-->
+<!--                    <template slot="rowMappingTemplate" data-oj-as="row">-->
+<!--                        <oj-gantt-row tasks="[[row.data.shifts]]" label="[[row.data.resource]]"></oj-gantt-row>-->
+<!--                    </template>-->
+<!--                    <template slot="taskMappingTemplate" data-oj-as="task">-->
+<!--                        <oj-gantt-task-->
+<!--                                task-id="[[task.data.id]]"-->
+<!--                                start="[[task.data.begin]]"-->
+<!--                                end="[[task.data.finish]]"-->
+<!--                                label="[[task.data.name]]"-->
+<!--                                svg-class-name="[[getSvgClassName(task.data.name)]]"></oj-gantt-task>-->
+<!--                    </template>-->
+<!--                    <template slot="rowAxisLabelTemplate" data-oj-as="rowAxisLabel">-->
+<!--                        <svg class="demo-gantt-row-label">-->
+<!--                            <g>-->
+<!--                                <foreignobject :x="[[getRowImageX()]]" width="1.75em" height="1.75em">-->
+<!--                                    <oj-avatar-->
+<!--                                            src="[[rowLabelImagePath[rowAxisLabel.rowData.id.replace(' ', '')]]]"-->
+<!--                                            size="xxs"></oj-avatar>-->
+<!--                                </foreignobject>-->
+<!--                                <text :x="[[getRowTextX()]]" y="19">-->
+<!--                                    <oj-bind-text value="[[rowAxisLabel.rowData.label]]"></oj-bind-text>-->
+<!--                                </text>-->
+<!--                            </g>-->
+<!--                        </svg>-->
+<!--                    </template>-->
+<!--                </oj-gantt>-->
+
+
+
                 <oj-gantt
-                        id="gantt"
-                        aria-label="Gantt with draggable tasks"
+                        id="customers_gantt"
                         drag-mode="[[dragModeValue]]"
-                        start="[[projectStartDate]]"
-                        end="[[projectEndDate]]"
-                        viewport-start="[[viewportStart]]"
-                        viewport-end="[[viewportEnd]]"
+                        start="[[projectStartDate.toISOString()]]"
+                        end="[[projectEndDate.toISOString()]]"
+                        viewport-start="[[viewportStart.toISOString()]]"
+                        viewport-end="[[viewportEnd.toISOString()]]"
+
+
                         gridlines.vertical="visible"
                         major-axis.scale="days"
-                        major-axis.zoom-order='["months", "weeks", "days","hours"]'
-                        minor-axis.scale="hours"
-                        minor-axis.zoom-order='["weeks", "days","hours","minutes"]'
+                        major-axis.zoom-order='[[ ["weeks","days",custom8HrScale,"hours"] ]]'
+                        minor-axis.scale="[[custom8HrScale]]"
+                        minor-axis.zoom-order='[[ ["weeks","days",custom8HrScale,"hours"] ]]'
                         row-axis.rendered="on"
+
+
                         row-data="[[dataProvider]]"
+                        :aria-label='[["Gantt Chart. Current date is " + currentDateFormatted ]]'
                         selection-mode="multiple"
                         dnd.move.tasks="enabled"
                         on-oj-move="[[handleMove]]"
@@ -47,7 +98,27 @@
                                 end="[[task.data.finish]]"
                                 label="[[task.data.name + ': '+ task.data.user]]"></oj-gantt-task>
                     </template>
+
+
+
+                    <template slot="rowAxisLabelTemplate" data-oj-as="rowAxisLabel">
+                        <svg class="demo-gantt-row-label">
+                            <g>
+                                <foreignobject :x="[[getRowImageX()]]" width="1.75em" height="1.75em">
+                                    <oj-avatar
+                                            src="[[rowLabelImagePath[rowAxisLabel.rowData.id.replace(' ', '')]]]"
+                                            size="xxs"></oj-avatar>
+                                </foreignobject>
+                                <text :x="[[getRowTextX()]]" y="19">
+                                    <oj-bind-text value="[[rowAxisLabel.rowData.label]]"></oj-bind-text>
+                                </text>
+                            </g>
+                        </svg>
+                    </template>
                 </oj-gantt>
+
+
+
             </div>
 
 

@@ -5,6 +5,19 @@
     Description:
         This is where any of your application specific styles should be included
 */
+
+.demo-dayshift-taskbar {
+  fill: var(--oj-dvt-success-color);
+}
+
+.demo-nightshift-taskbar {
+  fill: var(--oj-dvt-danger-color);
+}
+
+.demo-eveningshift-taskbar {
+  fill: var(--oj-dvt-warning-color);
+}
+
 .demo-gantt-container {
   width: 100%;
   min-width: 45rem;

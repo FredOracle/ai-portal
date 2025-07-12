@@ -9,33 +9,9 @@
       To change the content of this section, you will make edits to the about.html file located in the /js/views folder.
   </div>
     <div id="sampleDemo" class="demo-padding demo-container">
-        <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+        <div id="componentDemoContent" style="width: 100px; min-width: 100%;">
 
             <div id="container">
-                <div class="oj-panel oj-bg-info-30 oj-sm-margin-4x-bottom">
-                    <h2 id="h1" class="oj-typography-subheading-md">Options To Control The Gantt Below</h2>
-                    <oj-form-layout user-assistance-density="reflow" max-columns="1" direction="row">
-                        <oj-checkboxset
-                                id="task-elements"
-                                class="oj-choice-direction-row"
-                                label-hint="Task elements to show"
-                                value="[[taskElementsDetails]]"
-                                on-value-changed="[[handleTaskElementsSettings]]">
-                            <oj-option value="attribute">Attribute</oj-option>
-                            <oj-option value="overtime">Overtime</oj-option>
-                            <oj-option value="downtime">Downtime</oj-option>
-                        </oj-checkboxset>
-                        <oj-checkboxset
-                                id="toggles"
-                                class="oj-choice-direction-row"
-                                label-hint="Controls"
-                                value="[[togglesDetails]]"
-                                on-value-changed="[[handleTogglesSettings]]">
-                            <oj-option value="timeCursor">Time Cursor</oj-option>
-                            <oj-option value="zooming">Zooming</oj-option>
-                        </oj-checkboxset>
-                    </oj-form-layout>
-                </div>
 
                 <oj-gantt
                         id="gantt"

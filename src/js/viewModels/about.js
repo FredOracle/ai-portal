@@ -8,8 +8,36 @@
 /*
  * Your about ViewModel code goes here
  */
-define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "text!/js/mock/about/rowData.json", "text!/js/mock/about/depData.json", "ojs/ojarraydataprovider", "ojs/ojarraytreedataprovider", "ojs/ojconverter-datetime", "ojs/ojknockout-keyset", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojcheckboxset", "ojs/ojformlayout"],
-    function (accUtils, require, exports, ko, ojbootstrap_1, data, depData, ArrayDataProvider, ArrayTreeDataProvider, ojconverter_datetime_1, ojknockout_keyset_1) {
+define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap",
+        "text!/js/mock/about/rowData.json", "text!/js/mock/about/depData.json",
+        "ojs/ojarraydataprovider", "ojs/ojarraytreedataprovider", "ojs/ojconverter-datetime",
+        "ojs/ojknockout-keyset", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojcheckboxset", "ojs/ojformlayout"],
+    function (accUtils, require, exports, ko, ojbootstrap_1, data, depData, ArrayDataProvider,
+              ArrayTreeDataProvider, ojconverter_datetime_1, ojknockout_keyset_1) {
+
+        class CustomScaleNHr {
+            constructor(N) {
+                this.converter = new ojconverter_datetime_1.IntlDateTimeConverter({
+                    hour: '2-digit',
+                    hour12: true
+                });
+                this.hour = 60 * 60 * 1000;
+                this.name = `${N}hr`;
+                this.N = N;
+            }
+            formatter(date) {
+                return this.converter.format(date);
+            }
+            getNextDate(date) {
+                return new Date(new Date(date).getTime() + this.N * this.hour).toISOString();
+            }
+            getPreviousDate(date) {
+                const d = new Date(date);
+                d.setHours(Math.floor(d.getHours() / this.N) * this.N, 0, 0, 0);
+                return d.toISOString();
+            }
+        }
+
         function AboutViewModel() {
             // Below are a set of the ViewModel methods invoked by the oj-module component.
             // Please reference the oj-module jsDoc for additional information.
@@ -24,11 +52,11 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "tex
             });
             self.taskElementsDetails = [];
             self.togglesDetails = [];
-            self.showAttribute = ko.observable(false);
-            self.showOvertime = ko.observable(false);
-            self.showDowntime = ko.observable(false);
-            self.timeCursor = ko.observable('off');
-            self.zooming = ko.observable('off');
+            self.showAttribute = ko.observable(true);
+            self.showOvertime = ko.observable(true);
+            self.showDowntime = ko.observable(true);
+            self.timeCursor = ko.observable('on');
+            self.zooming = ko.observable('on');
             self.dndAction = ko.observable('(Move or Resize a Task)');
             self.handleTaskElementsSettings = (event) => {
                 self.taskElementsDetails = event.detail.value;
@@ -60,7 +88,7 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "tex
             self.projectStartDate = new Date('2020-10-01T00:00:00');
             self.projectEndDate = new Date('2020-10-31T00:00:00');
             // 8 hours scale
-            self.custom8HrScale = new DemoCustomScaleNHr(8);
+            self.custom8HrScale = new CustomScaleNHr(8);
             // Date converter
             self.dateConverter = new ojconverter_datetime_1.IntlDateTimeConverter({
                 formatType: 'date',
@@ -96,12 +124,6 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "tex
                 const dir = document.documentElement.getAttribute('dir');
                 return dir === 'ltr' ? '0' : -rowAxisWidth;
             };
-
-
-
-            
-
-
 
 
             /**
