@@ -1,0 +1,37 @@
+[
+  {
+    "id": "d1",
+    "predecessor": "task-100",
+    "successor": "task-002",
+    "relation": "finishStart",
+    "status": "critical"
+  },
+  {
+    "id": "d2",
+    "predecessor": "task-001",
+    "successor": "task-003",
+    "relation": "finishStart",
+    "status": "normal"
+  },
+  {
+    "id": "d3",
+    "predecessor": "task-100",
+    "successor": "task-201",
+    "relation": "finishStart",
+    "status": "critical"
+  },
+  {
+    "id": "d4",
+    "predecessor": "task16",
+    "successor": "task19",
+    "relation": "finishStart",
+    "status": "normal"
+  },
+  {
+    "id": "d5",
+    "predecessor": "task28",
+    "successor": "task29",
+    "relation": "finishStart",
+    "status": "critical"
+  }
+]

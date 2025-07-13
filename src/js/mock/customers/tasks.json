@@ -1,0 +1,98 @@
+[
+  {
+    "resource": "工作台",
+    "tasks": [
+      {
+        "id": "task-100",
+        "begin": "2025-07-03",
+        "finish": "2025-07-05",
+        "name": "工作台后台统计功能实现",
+        "status": "critical",
+        "progress": 25,
+        "user": "马伟"
+      },
+      {
+        "id": "task-101",
+        "begin": "2025-07-04",
+        "finish": "2025-07-07",
+        "name": "工作台前端页面功能",
+        "status": "normal",
+        "progress": 95,
+        "user": "毕尚"
+      },
+      {
+        "id": "task-102",
+        "begin": "2025-07-06",
+        "finish": "2025-07-09",
+        "name": "工作台风险统计",
+        "status": "normal",
+        "progress": 95,
+        "user": "李帅"
+      }
+    ]
+  },
+  {
+    "resource": "风险管理",
+    "tasks": [
+      {
+        "id": "task-001",
+        "begin": "2025-07-02",
+        "finish": "2025-07-04",
+        "name": "{{faker 'lorem.sentence'}}",
+        "status": "normal",
+        "progress": 95,
+        "user": "毕权忠"
+      },
+      {
+        "id": "task-002",
+        "begin": "2025-07-07",
+        "finish": "2025-07-09",
+        "name": "{{faker 'lorem.sentence'}}",
+        "status": "normal",
+        "progress": 95,
+        "user": "梁卓成"
+      },
+      {
+        "id": "task-003",
+        "begin": "2025-07-08",
+        "finish": "2025-07-11",
+        "name": "{{faker 'lorem.sentence'}}",
+        "status": "normal",
+        "progress": 95,
+        "user": "{{oneOf (array '马伟' '毕尚' '李帅' '毕权忠' '梁卓成') }}"
+      }
+    ]
+  },
+  {
+    "resource": "威胁分析",
+    "tasks": [
+      {
+        "id": "task-201",
+        "begin": "2025-07-06",
+        "finish": "2025-07-09",
+        "name": "{{faker 'lorem.sentence'}}",
+        "status": "normal",
+        "progress": 95,
+        "user": "毕权忠"
+      },
+      {
+        "id": "task-202",
+        "begin": "2025-07-17",
+        "finish": "2025-07-19",
+        "name": "{{faker 'lorem.sentence'}}",
+        "status": "critical",
+        "progress": 95,
+        "user": "梁卓成"
+      },
+      {
+        "id": "task-203",
+        "begin": "2025-07-18",
+        "finish": "2025-07-21",
+        "name": "{{faker 'lorem.sentence'}}",
+        "status": "normal",
+        "progress": 95,
+        "user": "{{oneOf (array '马伟' '毕尚' '李帅' '毕权忠' '梁卓成') }}"
+      }
+    ]
+  }
+]

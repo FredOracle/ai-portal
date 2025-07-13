@@ -3,65 +3,107 @@
  Licensed under The Universal Permissive License (UPL), Version 1.0
  as shown at https://oss.oracle.com/licenses/upl/
  -->
-<div class="oj-hybrid-padding">
-  <h1>Customers Content Area</h1>
+<div class="oj-hybrid-padding demo-padding demo-container" >
+    <h1>Customers Content Area</h1>
 
-    <div id="sampleDemo" class="demo-padding demo-container">
-        <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
 
-            <div id="gantt-container">
-                <div class="oj-panel oj-bg-info-30 oj-sm-margin-4x-bottom">
-                    <h2 id="h1" class="oj-typography-subheading-md">Options To Control The Gantt Below</h2>
-                    <oj-form-layout user-assistance-density="reflow" aria-controls="gantt">
-                        <demo-radioset-enum
-                                value="{{dragModeValue}}"
-                                direction="row"
-                                label-hint="Drag Mode"
-                                enum-values='["pan", "select"]'></demo-radioset-enum>
-                    </oj-form-layout>
+    <oj-gantt
+            id="gantt"
+            aria-label="Gantt with draggable tasks"
+            drag-mode="[[dragModeValue]]"
+            start="[[projectStartDate.toISOString()]]"
+            end="[[projectEndDate.toISOString()]]"
+            viewport-start="[[viewportStart.toISOString()]]"
+            viewport-end="[[viewportEnd.toISOString()]]"
+            gridlines.vertical="visible"
+            major-axis.scale="days"
+            major-axis.zoom-order='["weeks", "days","hours"]'
+            minor-axis.scale="[[minorAxisScale]]"
+            minor-axis.zoom-order='["weeks", "days","hours"]'
+            row-axis.rendered="on"
+            row-data="[[dataProvider]]"
+            dependency-data="[[dependencyDataProvider]]"
+            selection-mode="multiple"
+            dnd.move.tasks="enabled"
+            on-oj-move="[[handleMove]]"
+            task-defaults.resizable="enabled"
+            task-defaults.label-position="innerCenter"
+            task-defaults.border-radius="5"
+            task-defaults.height="50"
+            reference-objects="[[referenceObjects]]"
+            on-oj-resize="[[handleResize]]"
+            class="demo-gantt">
+
+
+        <template slot="rowMappingTemplate" data-oj-as="row">
+            <oj-gantt-row label="[[row.data.resource]]" tasks="[[row.data.tasks]]"></oj-gantt-row>
+        </template>
+
+        <template slot="taskMappingTemplate" data-oj-as="task">
+            <oj-gantt-task
+                    task-id="[[task.data.id]]"
+                    start="[[task.data.begin]]"
+                    end="[[task.data.finish]]"
+                    label="[[task.data.name + ': '+ task.data.user + ':' + task.data.status]]"
+                    svg-class-name='[[task.data.status === "critical" ? "demo-critical-taskbar" : ""]]'
+                    short-desc="[[getShortDesc(task.data, task.rowData.label)]]"
+
+            ></oj-gantt-task>
+
+
+
+
+        </template>
+        <template slot="dependencyTemplate" data-oj-as="dependency">
+            <oj-gantt-dependency
+                    predecessor-task-id="[[dependency.data.predecessor]]"
+                    successor-task-id="[[dependency.data.successor]]"
+                    type="[[dependency.data.relation]]"
+                    svg-class-name='[[dependency.data.status === "critical" ? "demo-critical-connector" : ""]]'></oj-gantt-dependency>
+        </template>
+
+        <template slot="tooltipTemplate" data-oj-as="tooltip">
+            <div>
+                <div class="oj-sm-float-start">
+                    <span>
+                      <b>
+                        <oj-bind-text value="[['责任人: ' + tooltip.rowData.label]]"></oj-bind-text>
+                      </b>
+                    </span>
+                    <br />
+                    <span>
+                      <oj-bind-text
+                              value="[['任务开始时间: ' + dateConverter.format(tooltip.data.start)]]"></oj-bind-text>
+                    </span>
+                    <br />
+                    <span>
+                      <oj-bind-text
+                              value="[['任务结束时间: ' + dateConverter.format(tooltip.data.end)]]"></oj-bind-text>
+                    </span>
                 </div>
-
-                <oj-gantt
-                        id="gantt"
-                        aria-label="Gantt with draggable tasks"
-                        drag-mode="[[dragModeValue]]"
-                        start="[[projectStartDate]]"
-                        end="[[projectEndDate]]"
-                        viewport-start="[[viewportStart]]"
-                        viewport-end="[[viewportEnd]]"
-                        gridlines.vertical="visible"
-                        major-axis.scale="days"
-                        major-axis.zoom-order='["months", "weeks", "days","hours"]'
-                        minor-axis.scale="hours"
-                        minor-axis.zoom-order='["weeks", "days","hours","minutes"]'
-                        row-axis.rendered="on"
-                        row-data="[[dataProvider]]"
-                        selection-mode="multiple"
-                        dnd.move.tasks="enabled"
-                        on-oj-move="[[handleMove]]"
-                        task-defaults.resizable="enabled"
-                        task-defaults.label-position="innerCenter"
-                        task-defaults.border-radius="5"
-                        task-defaults.height="50"
-                        on-oj-resize="[[handleResize]]"
-                        class="demo-gantt">
-                    <template slot="rowMappingTemplate" data-oj-as="row">
-                        <oj-gantt-row label="[[row.data.resource]]" tasks="[[row.data.tasks]]"></oj-gantt-row>
-                    </template>
-                    <template slot="taskMappingTemplate" data-oj-as="task">
-                        <oj-gantt-task
-                                task-id="[[task.data.id]]"
-                                start="[[task.data.begin]]"
-                                end="[[task.data.finish]]"
-                                label="[[task.data.name + ': '+ task.data.user]]"></oj-gantt-task>
-                    </template>
-                </oj-gantt>
+                <oj-status-meter-gauge
+                        id="gauge"
+                        min="0"
+                        max="100"
+                        value="{{tooltip.itemData.progress}}"
+                        orientation="circular"
+                        color="[[tooltip.color]]"
+                        readonly
+                        class="oj-sm-float-end oj-sm-padding-2x-start demo-gantt-tooltip-gauge"></oj-status-meter-gauge>
             </div>
+        </template>
 
-
-
-        </div>
-    </div>
-
-
+        <oj-menu
+                id="ctxMenu"
+                slot="contextMenu"
+                aria-label="Match Edit"
+                on-oj-menu-action="[[menuItemAction]]"
+                on-oj-before-open="[[beforeOpenFunction]]">
+            <oj-option value="createTask">新建任务</oj-option>
+            <oj-option value="reassign">重新分配</oj-option>
+            <oj-option value="modifyTask">修改任务</oj-option>
+            <oj-option value="deleteTask">删除任务</oj-option>
+        </oj-menu>
+    </oj-gantt>
+    <div id="timeAxisDrillInfo" aria-live="polite" class="oj-helper-hidden-accessible"></div>
 </div>
