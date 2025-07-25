@@ -54,7 +54,29 @@
       </a></li>
     </script>
 
-    <div id="globalBody">
+    <div id="globalBody"  class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
+
+      <!-- Messages -->
+      <oj-message-banner
+              data="[[messageDataprovider]]"
+              type="page"
+              on-oj-close="[[closeMessageHandler]]"></oj-message-banner>
+
+<!--      <oj-messages id="oj-messages-id" messages="[[messageDataprovider]]" display="general"-->
+<!--                   on-oj-close="[[closeMessageHandler]]"-->
+<!--                   position='{"my": {"vertical":"top", "horizontal": "center"},-->
+<!--                                "at": {"vertical": "bottom", "horizontal": "center"},-->
+<!--                                "of": "#pageHeader"}'>-->
+<!--        <template slot="messageTemplate" data-oj-as="message">-->
+<!--          <oj-message message="[[message.data]]">-->
+<!--            <div slot="detail" class="oj-flex-bar oj-sm-align-items-center">-->
+<!--              <div class="oj-flex-bar-middle">-->
+<!--                <div data-bind="html: message.data.detail"></div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </oj-message>-->
+<!--        </template>-->
+<!--      </oj-messages>-->
 
       <div id="announce" tabindex="-1" class="send-off-screen" :aria-live="[[manner]]" aria-atomic="true">
           <p id="ariaLiveMessage"><oj-bind-text value="[[message]]"></oj-bind-text></p>

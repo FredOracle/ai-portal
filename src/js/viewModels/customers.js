@@ -8,10 +8,9 @@
 /*
  * Your customer ViewModel code goes here
  */
-define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js/mock/customers/rowDataWeeks.json",
-        "text!/js/mock/customers/rowDataDays.json","text!/js/mock/customers/rowDataDependency.json","require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider",
+define(['../accUtils', 'services/customers/customersApis', 'appController',"require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider",
         "ojs/ojconverter-datetime", "ojs/ojtimeutils", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojformlayout", "ojs/ojmenu", "ojs/ojgauge"],
-    function (accUtils,mockData, weeksData, daysData, depData,
+    function (accUtils,customersApis, app,
               require, exports, ko, ojbootstrap_1, ArrayDataProvider, ojconverter_datetime_1, TimeUtils ) {
 
         function CustomerViewModel() {
@@ -23,6 +22,9 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
             self.endTime =  ko.observable("2025-07-30");
             self.todayTime = ko.observable("2025-07-05");
 
+
+            self.weeksData = ko.observableArray();
+            self.daysData = ko.observableArray();
 
 
             self.projectStartDate =  new Date(self.startTime());
@@ -68,7 +70,7 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                     xl: self.day * 14,
                     xxl: self.day * 14
                 },
-                dataProvider: new ArrayDataProvider(JSON.parse(weeksData), {
+                dataProvider: new ArrayDataProvider(self.weeksData(), {
                     keyAttributes: 'resource'
                 })
             };
@@ -88,7 +90,7 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                     xl: self.day * 0.5,
                     xxl: self.day * 0.5
                 },
-                dataProvider: new ArrayDataProvider(JSON.parse(daysData), {
+                dataProvider: new ArrayDataProvider(self.daysData(), {
                     keyAttributes: 'resource'
                 })
             };
@@ -121,12 +123,17 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
             };
 
             self.dragModeValue = ko.observable('select');
-            self.rowData = ko.observableArray(JSON.parse(mockData));
-            self.dataProvider = new ArrayDataProvider(self.rowData, {
+
+
+            //任务
+            self.taskRowData = ko.observableArray();
+            self.dataProvider = new ArrayDataProvider(self.taskRowData, {
                 keyAttributes: 'resource'
             });
 
-            self.dependencyDataProvider = new ArrayDataProvider(JSON.parse(depData), {
+            //任务间的依赖关系
+            self.dependencyData = ko.observableArray();
+            self.dependencyDataProvider = new ArrayDataProvider(self.dependencyData, {
                 keyAttributes: 'id'
             });
 
@@ -148,7 +155,7 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                 // If multiple tasks dragged, figure out the offsets from the initial source task location,
                 // so that we can reapply the same offset to the final drop location
                 const timeOffsetFromReference = self.getTime(event.detail.start) - self.getTime(sourceTaskContext.data.start);
-                const rowData = self.rowData();
+                const rowData = self.taskRowData();
                 const targetRowInd = self.getRowInd(event.detail.rowContext.rowData.id);
                 // if multiple tasks dragged, move all of them to the target row
                 taskContexts.forEach((taskContext) => {
@@ -159,7 +166,7 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                     taskDatum.finish = self.getString(self.getTime(taskContext.data.end) + timeOffsetFromReference);
                     rowData[targetRowInd].tasks.push(taskDatum);
                 });
-                self.rowData(rowData);
+                self.taskRowData(rowData);
             };
             self.handleResize = (event) => {
                 const taskContexts = event.detail.taskContexts;
@@ -176,23 +183,23 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                     const newTaskEndTime = Math.max(taskStartTime, taskEndTime + deltaEndTime);
                     const rowInd = self.getRowInd(taskContext.rowData.id);
                     const taskInd = self.getTaskInd(rowInd, taskContext.data.id);
-                    const taskDatum = self.rowData()[rowInd].tasks[taskInd];
+                    const taskDatum = self.taskRowData()[rowInd].tasks[taskInd];
                     taskDatum.begin = self.getString(newTaskStartTime);
                     taskDatum.finish = self.getString(newTaskEndTime);
                 });
                 // Notify subscribers that the underlying array of the observable array changed its state;
                 // self will trigger the Gantt to refresh with the new data.
-                self.rowData.valueHasMutated();
+                self.taskRowData.valueHasMutated();
             };
 
 
             self.getRowInd = function (id) {
-                return self.rowData()
+                return self.taskRowData()
                     .map((r) => r.resource)
                     .indexOf(id);
             }
             self.getTaskInd = function (rowInd, id) {
-                return self.rowData()[rowInd].tasks.map((t) => t.id)
+                return self.taskRowData()[rowInd].tasks.map((t) => t.id)
                     .indexOf(id);
             }
             self.getTime = function (isoString) {
@@ -214,7 +221,6 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
             self.beforeOpenFunction = (event) => {
                 console.log(event)
                 const target = event.detail.originalEvent.target;
-                console.log("111111111111111111111")
                 console.log(target);
                 if (target.id === 'gantt') {
                     // Handle keyboard interaction.
@@ -244,6 +250,16 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                 console.log("selected: rowIndex:  " + self.rowIndex() + "     taskIndex: " + self.taskIndex())
             };
             self.menuItemAction = (event) => {
+                const taskContexts = event.detail.taskContexts;
+                console.log(taskContexts);
+                if (taskContexts != null) {
+                    taskContexts.forEach((taskContext) => {
+                        const rowInd = self.getRowInd(taskContext.rowData.id);
+                        console.log("----------------------  :::  " + rowInd);
+                    });
+                }
+
+
                 const selectedValue = event.detail.selectedValue;
                 let text = `${selectedValue} from gantt background`;
                 if (self.rowIndex() !== null && self.taskIndex() !== null) {
@@ -290,7 +306,7 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
             }
             // add/remove task from second row
             self.addTask = () => {
-                const data =  self.rowData();
+                const data =  self.taskRowData();
                 const secondRowTasks = data[self.rowIndex()].tasks;
 
                 if (self.rowIndex() !== null && self.taskIndex() !== null) {
@@ -306,28 +322,74 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                     const task = self.randomTask(id, label, '#32925e');
                     secondRowTasks.push(task);
                 }
-                self.rowData(data);
+                self.taskRowData(data);
             };
             self.removeTask = () => {
                 console.log('remove task.....................');
-                const data = self.rowData();
+                const data = self.taskRowData();
                 const secondRowTasks = data[self.rowIndex()].tasks;
                 secondRowTasks.splice(self.taskIndex(), 1);
-                self.rowData(data);
+                self.taskRowData(data);
             };
 
 
 
-            self.serviceUrl = "http://localhost:3000/tasks";
-            self.loadData = function () {
-                fetch(self.serviceUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        self.rowData(data);
-                    });
+            function loadTasks() {
+                customersApis.fetchTasks().then(function(data) {
+                    self.taskRowData(data);
+                }).catch(function(response) {
+                    app.pushMessage("error", "Error fetching details", "");
+                });
             }
 
+            function loadDependencies() {
+                customersApis.fetchDependencies().then(function (data) {
+                    self.dependencyData(data);
+                }).catch(function (response) {
+                    app.pushMessage("error", "Error fetching details", "");
+                });
+            }
+
+
+            // self.tasksUrl = "http://localhost:3000/project/tasks";
+            // self.loadTasksData = function () {
+            //     fetch(self.tasksUrl)
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             self.rowData(data);
+            //         })
+            //         .catch((error) => {
+            //             console.log("=========");
+            //             self.rowData(JSON.parse(mockData));
+            //             self.dataProvider = new ArrayDataProvider(self.rowData, {
+            //                 keyAttributes: 'resource'
+            //             });
+            //     });
+            // }
+
+            // self.weeksUrl = "http://localhost:3000/weeks";
+            // self.loadWeeksData = function () {
+            //     fetch(self.weeksUrl)
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             self.rowData(data);
+            //         })
+            //         .catch((error) => {
+            //             console.log("=========");
+            //         });
+            // }
+
+            // self.daysUrl = "http://localhost:3000/days";
+            // self.loadDaysData = function () {
+            //     fetch(self.daysUrl)
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             self.rowData(data);
+            //         })
+            //         .catch((error) => {
+            //             console.log("=========");
+            //         });
+            // }
 
             /**
              * Optional ViewModel method invoked after the View is inserted into the
@@ -341,7 +403,8 @@ define(['../accUtils', "text!/js/mock/customers/customersRowData.json","text!/js
                 accUtils.announce('Customers page loaded.', 'assertive');
                 document.title = "Customers";
                 // Implement further logic if needed
-                self.loadData();
+                loadTasks();
+                loadDependencies();
             };
 
             /**

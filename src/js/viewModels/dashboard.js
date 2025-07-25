@@ -9,8 +9,8 @@
  * Your dashboard ViewModel code goes here
  *  "require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider", "text!../cookbook/dataCollections/table/shared/departmentData.json", "ojs/ojtable", "ojs/ojknockout"
  */
-define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", "ojs/ojtable", "ojs/ojknockout"],
-    function (accUtils, require, exports, ko, ojbootstrap_1, ArrayDataProvider, ListDataProviderView) {
+define(['../accUtils', "require", "exports", "knockout", 'appController',"ojs/ojbootstrap", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", 'services/dashboard/dashboardApis', "ojs/ojtable", "ojs/ojknockout"],
+    function (accUtils, require, exports, ko, app, ojbootstrap_1, ArrayDataProvider, ListDataProviderView, dashboardApis) {
         function DashboardViewModel() {
             // Below are a set of the ViewModel methods invoked by the oj-module component.
             // Please reference the oj-module jsDoc for additional information
@@ -40,6 +40,18 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "ojs
             }
 
 
+            function loadTasks() {
+                dashboardApis.fetchDepartments().then(function(data) {
+                    // deptArray = data;
+                    // let depts = ko.mapping.toJS(ko.mapping.fromJS(deptArray));
+                    self.deptArray(data);
+                    app.pushMessage("error", "Error fetching details", "");
+                }).catch(function(response) {
+                    console.log(response);
+                    // app.pushMessage("error", "Error fetching details", "");
+                });
+            }
+
             /**
              * Optional ViewModel method invoked after the View is inserted into the
              * document DOM.  The application can put logic that requires the DOM being
@@ -51,7 +63,8 @@ define(['../accUtils', "require", "exports", "knockout", "ojs/ojbootstrap", "ojs
             this.connected = () => {
                 accUtils.announce('Dashboard page loaded.', 'assertive');
                 document.title = "Dashboard";
-                self.loadData();
+                // self.loadData();
+                loadTasks();
                 console.log("----------------connected")
                 // Implement further logic if needed
             };
