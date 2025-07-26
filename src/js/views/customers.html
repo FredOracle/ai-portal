@@ -3,9 +3,7 @@
  Licensed under The Universal Permissive License (UPL), Version 1.0
  as shown at https://oss.oracle.com/licenses/upl/
  -->
-<div class="oj-hybrid-padding demo-padding demo-container" >
-    <h1>Customers Content Area</h1>
-
+<div class="oj-hybrid-padding demo-padding demo-container oj-panel-shadow-lg" >
 
     <oj-gantt
             id="gantt"
@@ -31,8 +29,7 @@
             task-defaults.border-radius="5"
             task-defaults.height="50"
             reference-objects="[[referenceObjects]]"
-            on-oj-resize="[[handleResize]]"
-            class="demo-gantt">
+            on-oj-resize="[[handleResize]]" >
 
 
         <template slot="rowMappingTemplate" data-oj-as="row">
@@ -49,11 +46,8 @@
                     short-desc="[[getShortDesc(task.data, task.rowData.label)]]"
 
             ></oj-gantt-task>
-
-
-
-
         </template>
+
         <template slot="dependencyTemplate" data-oj-as="dependency">
             <oj-gantt-dependency
                     predecessor-task-id="[[dependency.data.predecessor]]"
@@ -105,5 +99,38 @@
             <oj-option value="deleteTask">删除任务</oj-option>
         </oj-menu>
     </oj-gantt>
-    <div id="timeAxisDrillInfo" aria-live="polite" class="oj-helper-hidden-accessible"></div>
+
+    <oj-dialog id="createTaskDialog" dialog-title="Modal Dialog" aria-describedby="desc">
+        <div slot="body">
+            <oj-form-layout max-columns="3" direction="row" class="oj-sm-padding-2x-bottom">
+                <oj-label>需求名称</oj-label>
+                <oj-input-text required="true" label-hint="required" value="{{newRequirementName}}"></oj-input-text>
+
+                <oj-label>任务名称</oj-label>
+                <oj-input-text required="true" label-hint="required" value="{{newTaskName}}"></oj-input-text>
+
+                <oj-label>开始时间</oj-label>
+                <oj-input-date id="start-date" required="true" label-hint="required" value="{{newStartTime}}"></oj-input-date>
+
+                <oj-label>结束时间</oj-label>
+                <oj-input-date id="end-date" required="true" label-hint="required"  value="{{newEndTime}}"></oj-input-date>
+            </oj-form-layout>
+        </div>
+        <div slot="footer">
+            <oj-button id="okButton" on-oj-action="[[addTask]]">OK</oj-button>
+        </div>
+    </oj-dialog>
+
+    <oj-dialog id="modifyTaskDialog" dialog-title="Modal Dialog" aria-describedby="desc">
+        <div slot="body">
+            <oj-form-layout max-columns="3" direction="row" class="oj-sm-padding-2x-bottom">
+                <oj-input-text required="true" label-hint="required"></oj-input-text>
+                <oj-input-date id="start-date" required="true" label-hint="required" value="{{newStartTime}}"></oj-input-date>
+                <oj-input-date id="end-date" required="true" label-hint="required"  value="{{newEndTime}}"></oj-input-date>
+            </oj-form-layout>
+        </div>
+        <div slot="footer">
+            <oj-button id="okButton" on-oj-action="[[modifyTask]]">OK</oj-button>
+        </div>
+    </oj-dialog>
 </div>

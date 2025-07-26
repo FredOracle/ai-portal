@@ -85,6 +85,12 @@ function UserProfile() {
     };
 }
 
+function Requirement(){
+    return {
+        "resource": "",
+        "tasks": []
+    };
+}
 
 function Task() {
     return {

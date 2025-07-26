@@ -9,7 +9,8 @@
  * Your customer ViewModel code goes here
  */
 define(['../accUtils', 'services/customers/customersApis', 'appController',"require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojarraydataprovider",
-        "ojs/ojconverter-datetime", "ojs/ojtimeutils", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojformlayout", "ojs/ojmenu", "ojs/ojgauge"],
+        "ojs/ojconverter-datetime", "ojs/ojtimeutils", "ojs/ojknockout", "ojs/ojgantt", "ojs/ojdialog", "ojs/ojformlayout",
+        "ojs/ojmenu", "ojs/ojgauge", "ojs/ojdatetimepicker", "ojs/ojlabel", "ojs/ojformlayout", "ojs/ojinputnumber"],
     function (accUtils,customersApis, app,
               require, exports, ko, ojbootstrap_1, ArrayDataProvider, ojconverter_datetime_1, TimeUtils ) {
 
@@ -22,19 +23,21 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
             self.endTime =  ko.observable("2025-07-30");
             self.todayTime = ko.observable("2025-07-05");
 
+            self.newRequirementName = ko.observable();
+            self.newTaskName = ko.observable();
+            self.newStartTime = ko.observable();
+            self.newEndTime = ko.observable();
 
             self.weeksData = ko.observableArray();
             self.daysData = ko.observableArray();
 
 
+
             self.projectStartDate =  new Date(self.startTime());
-                // '2025-07-01';
             self.projectEndDate = new Date(self.endTime());
-                // '2025-07-30';
             self.viewportStart = new Date(self.startTime());
-                // '2025-07-01';
             self.viewportEnd = new Date(self.endTime());
-                // '2025-07-30';
+
 
             self.dateConverter = new ojconverter_datetime_1.IntlDateTimeConverter({
                 formatType: 'date',
@@ -53,7 +56,7 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
                     converter: {
                         weeks: {
                             format: (d) => {
-                                const weekNumber = (new Date(d).getTime() - self.projectStartDate().getTime()) / self.week + 1;
+                                let weekNumber = (new Date(d).getTime() - self.projectStartDate().getTime()) / self.week + 1;
                                 return `Week ${weekNumber}`;
                             }
                         }
@@ -125,9 +128,9 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
             self.dragModeValue = ko.observable('select');
 
 
-            //任务
-            self.taskRowData = ko.observableArray();
-            self.dataProvider = new ArrayDataProvider(self.taskRowData, {
+            //需求
+            self.requirementsRowData = ko.observableArray();
+            self.dataProvider = new ArrayDataProvider(self.requirementsRowData, {
                 keyAttributes: 'resource'
             });
 
@@ -140,66 +143,66 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
 
 
             self.getShortDesc = (task, resource) => {
-                const assignmentString = '责任人： ' + task.user;
-                const startTimeString = '任务开始时间：' + self.dateConverter.format(task.begin);
-                const endTimeString = '任务结束时间： ' + self.dateConverter.format(task.finish);
-                const progressString = '当前进度： ' + task.progress;
+                let assignmentString = '责任人： ' + task.user;
+                let startTimeString = '任务开始时间：' + self.dateConverter.format(task.begin);
+                let endTimeString = '任务结束时间： ' + self.dateConverter.format(task.finish);
+                let progressString = '当前进度： ' + task.progress;
                 return assignmentString + ', ' + startTimeString + ', ' + endTimeString + ', ' + progressString;
             };
 
 
             self.handleMove = (event) => {
-                const taskContexts = event.detail.taskContexts;
+                let taskContexts = event.detail.taskContexts;
                 // The first dataContext corresponds to the source task where the move was initiated
-                const sourceTaskContext = taskContexts[0];
+                let sourceTaskContext = taskContexts[0];
                 // If multiple tasks dragged, figure out the offsets from the initial source task location,
                 // so that we can reapply the same offset to the final drop location
-                const timeOffsetFromReference = self.getTime(event.detail.start) - self.getTime(sourceTaskContext.data.start);
-                const rowData = self.taskRowData();
-                const targetRowInd = self.getRowInd(event.detail.rowContext.rowData.id);
+                let timeOffsetFromReference = self.getTime(event.detail.start) - self.getTime(sourceTaskContext.data.start);
+                let rowData = self.requirementsRowData();
+                let targetRowInd = self.getRowInd(event.detail.rowContext.rowData.id);
                 // if multiple tasks dragged, move all of them to the target row
                 taskContexts.forEach((taskContext) => {
-                    const sourceRowInd = self.getRowInd(taskContext.rowData.id);
-                    const sourceTaskInd = self.getTaskInd(sourceRowInd, taskContext.data.id);
-                    const taskDatum = rowData[sourceRowInd].tasks.splice(sourceTaskInd, 1)[0];
+                    let sourceRowInd = self.getRowInd(taskContext.rowData.id);
+                    let sourceTaskInd = self.getTaskInd(sourceRowInd, taskContext.data.id);
+                    let taskDatum = rowData[sourceRowInd].tasks.splice(sourceTaskInd, 1)[0];
                     taskDatum.begin = self.getString(self.getTime(taskContext.data.start) + timeOffsetFromReference);
                     taskDatum.finish = self.getString(self.getTime(taskContext.data.end) + timeOffsetFromReference);
                     rowData[targetRowInd].tasks.push(taskDatum);
                 });
-                self.taskRowData(rowData);
+                self.requirementsRowData(rowData);
             };
             self.handleResize = (event) => {
-                const taskContexts = event.detail.taskContexts;
+                let taskContexts = event.detail.taskContexts;
                 // The first dataContext corresponds to the source task where the resize was initiated
-                const sourceTaskContext = taskContexts[0];
-                const deltaStartTime = self.getTime(event.detail.start) - self.getTime(sourceTaskContext.data.start);
-                const deltaEndTime = self.getTime(event.detail.end) - self.getTime(sourceTaskContext.data.end);
+                let sourceTaskContext = taskContexts[0];
+                let deltaStartTime = self.getTime(event.detail.start) - self.getTime(sourceTaskContext.data.start);
+                let deltaEndTime = self.getTime(event.detail.end) - self.getTime(sourceTaskContext.data.end);
                 // if multiple tasks selected for resize, resize all of them according to how much the source task is resized
                 // by updating the start and end time of the tasks in the data
                 taskContexts.forEach((taskContext) => {
-                    const taskStartTime = self.getTime(taskContext.data.start);
-                    const taskEndTime = self.getTime(taskContext.data.end);
-                    const newTaskStartTime = Math.min(taskEndTime, taskStartTime + deltaStartTime);
-                    const newTaskEndTime = Math.max(taskStartTime, taskEndTime + deltaEndTime);
-                    const rowInd = self.getRowInd(taskContext.rowData.id);
-                    const taskInd = self.getTaskInd(rowInd, taskContext.data.id);
-                    const taskDatum = self.taskRowData()[rowInd].tasks[taskInd];
+                    let taskStartTime = self.getTime(taskContext.data.start);
+                    let taskEndTime = self.getTime(taskContext.data.end);
+                    let newTaskStartTime = Math.min(taskEndTime, taskStartTime + deltaStartTime);
+                    let newTaskEndTime = Math.max(taskStartTime, taskEndTime + deltaEndTime);
+                    let rowInd = self.getRowInd(taskContext.rowData.id);
+                    let taskInd = self.getTaskInd(rowInd, taskContext.data.id);
+                    let taskDatum = self.requirementsRowData()[rowInd].tasks[taskInd];
                     taskDatum.begin = self.getString(newTaskStartTime);
                     taskDatum.finish = self.getString(newTaskEndTime);
                 });
                 // Notify subscribers that the underlying array of the observable array changed its state;
                 // self will trigger the Gantt to refresh with the new data.
-                self.taskRowData.valueHasMutated();
+                self.requirementsRowData.valueHasMutated();
             };
 
 
             self.getRowInd = function (id) {
-                return self.taskRowData()
+                return self.requirementsRowData()
                     .map((r) => r.resource)
                     .indexOf(id);
             }
             self.getTaskInd = function (rowInd, id) {
-                return self.taskRowData()[rowInd].tasks.map((t) => t.id)
+                return self.requirementsRowData()[rowInd].tasks.map((t) => t.id)
                     .indexOf(id);
             }
             self.getTime = function (isoString) {
@@ -219,61 +222,78 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
             self.rowIndex = ko.observable ()   ;
             self.taskIndex = ko.observable ()   ;
             self.beforeOpenFunction = (event) => {
-                console.log(event)
-                const target = event.detail.originalEvent.target;
-                console.log(target);
+                let target = event.detail.originalEvent.target;
                 if (target.id === 'gantt') {
                     // Handle keyboard interaction.
-                    const selection = self.selectedItemsValue();
-                    console.log(selection)
+                    let selection = self.selectedItemsValue();
                     if (selection.length > 0) {
                         let selectedItem = selection[0];
-                        const parsedId = selectedItem.split(/(\d*)-(\d*)/g); // Id format is rowIndex-taskIndex
+                        let parsedId = selectedItem.split(/(\d*)-(\d*)/g); // Id format is rowIndex-taskIndex
                         self.rowIndex(Number(parsedId[1]) - 1);
                         self.taskIndex(Number(parsedId[2]) - 1);
                     }
                 } else {
                     // Handle mouse interaction.
-                    const gantt = document.getElementById('gantt');
-                    const context = gantt.getContextByNode(target);
-                    console.log(context);
+                    let gantt = document.getElementById('gantt');
+                    let context = gantt.getContextByNode(target);
+
                     if (context != null && context.subId == 'oj-gantt-taskbar') {
                         self.rowIndex(context['rowIndex']);
                         self.taskIndex(context['index']);
-                    }
-                    else {
-                        self.rowIndex(0);
-                        self.taskIndex(0);
+                    } else {
+                        self.rowIndex(null);
+                        self.taskIndex(null);
                     }
                 }
 
-                console.log("selected: rowIndex:  " + self.rowIndex() + "     taskIndex: " + self.taskIndex())
             };
             self.menuItemAction = (event) => {
-                const taskContexts = event.detail.taskContexts;
-                console.log(taskContexts);
-                if (taskContexts != null) {
-                    taskContexts.forEach((taskContext) => {
-                        const rowInd = self.getRowInd(taskContext.rowData.id);
-                        console.log("----------------------  :::  " + rowInd);
-                    });
-                }
-
-
-                const selectedValue = event.detail.selectedValue;
-                let text = `${selectedValue} from gantt background`;
-                if (self.rowIndex() !== null && self.taskIndex() !== null) {
-                    text = `${selectedValue} from Row ${self.rowIndex() + 1} Task ${self.taskIndex() + 1}`;
-                }
-                console.log(text);
+                let selectedValue = event.detail.selectedValue;
                 self.selectedMenuItem(self.taskIndex);
                 if (selectedValue === 'createTask') {
-                    self.addTask();
+                    if (self.taskIndex() !== null) {
+                        let requirements =  self.requirementsRowData();
+                        let requirement = requirements[self.rowIndex()];
+                        self.newRequirementName(requirement.resource);
+                    }
+
+                    let newTaskStartTime = new Date(self.currentDate);
+                    let newTaskEndTime = new Date(self.currentDate);
+
+                    self.newStartTime(newTaskStartTime.toISOString());
+                    self.newEndTime(newTaskEndTime.toISOString());
+
+                    document.getElementById('createTaskDialog').open();
                 }
                 if (selectedValue === 'deleteTask') {
                     self.removeTask();
                 }
 
+                if (selectedValue === 'reassign') {
+                    if (self.taskIndex() === null) {
+                        return;
+                    }
+                    // document.getElementById('modalDialog1').open();
+                }
+
+                if (selectedValue === 'modifyTask') {
+                    if (self.taskIndex() === null) {
+                        return;
+                    }
+
+                    let requirements =  self.requirementsRowData();
+                    let tasks = requirements[self.rowIndex()].tasks;
+                    let selectedTask = tasks[self.taskIndex()] ;
+
+                    console.log(selectedTask.finish + "::::::   " + selectedTask.begin)
+
+                    let newTaskStartTime = new Date(selectedTask.begin);
+                    let newTaskEndTime = new Date(selectedTask.finish);
+
+                    self.newStartTime(newTaskStartTime.toISOString());
+                    self.newEndTime(newTaskEndTime.toISOString());
+                    document.getElementById('modifyTaskDialog').open();
+                }
             };
 
 
@@ -283,21 +303,12 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
             }
 
             // Generates task with random start and end dates
-            self.randomTask = function (id, label, taskColor) {
-                let end;
-                const start = self.randomDate(new Date(2025, 7, 1), new Date(2025, 7, 31));
-                if (Math.random() < 0.9) {
-                    end = self.randomDate(new Date(start), new Date(start.getTime() + 4 * this.week));
-                } else {
-                    end = start;
-                } // generate milestone task ~ 1 in 10 tasks
-                const svgStyle = taskColor ? { fill: taskColor } : {};
-
-                console.log(start + "::::::" + end);
+            self.randomTask = function (id, label, start, end, taskColor) {
+                let svgStyle = taskColor ? { fill: taskColor } : {};
                 return {
                     id: id,
-                    begin: "2025-07-05",
-                    finish: "2025-07-06",
+                    begin: start.toISOString(),
+                    finish: end.toISOString(),
                     name: label,
                     progress: 1,
                     status:"normal",
@@ -306,37 +317,84 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
             }
             // add/remove task from second row
             self.addTask = () => {
-                const data =  self.taskRowData();
-                const secondRowTasks = data[self.rowIndex()].tasks;
+                let requirements = [];
+                let tasks = [];
 
-                if (self.rowIndex() !== null && self.taskIndex() !== null) {
-                    // add random task
-                    const id = 't_' + 1 + '_' +  Math.floor(Math.random()*100);
-                    const label = 'Label ' + 1 + '_' +  Math.floor(Math.random()*100);
-                    const task = self.randomTask(id, label, '#32925e');
-                    secondRowTasks.push(task);
+                let newTask = new Task();
+                newTask.name = self.newTaskName();
+                newTask.begin = self.newStartTime();
+                newTask.finish = self.newEndTime();
+                newTask.status = "normal";
+                newTask.progress = 1;
+                newTask.user = app.userLogin();
+                newTask.id = 't_' + 1 + '_' + Math.floor(Math.random()*100);
+
+
+                console.log(self.taskIndex() + "         " + self.rowIndex())
+                if (self.rowIndex() === null) {
+                    // add new random task
+                    tasks.push(newTask);
+                    let requirement = new Requirement();
+                    requirement.resource = self.newRequirementName();
+                    requirement.tasks = tasks;
+                    requirements.push(requirement);
                 } else {
-                    // add random task
-                    const id = 't_' + 1 + '_' + Math.floor(Math.random()*100);
-                    const label = 'Label ' + 1 + '_' + Math.floor(Math.random()*100);
-                    const task = self.randomTask(id, label, '#32925e');
-                    secondRowTasks.push(task);
+                    requirements =  self.requirementsRowData();
+                    let requirement = requirements[self.rowIndex()];
+                    tasks = requirement.tasks;
+                    tasks.push(newTask);
+                    requirements.splice(self.rowIndex(), 1, tasks);
                 }
-                self.taskRowData(data);
+                self.requirementsRowData(requirements);
+
+                document.getElementById('createTaskDialog').close();
             };
+
+
             self.removeTask = () => {
                 console.log('remove task.....................');
-                const data = self.taskRowData();
-                const secondRowTasks = data[self.rowIndex()].tasks;
+                let requirementsRowData = self.requirementsRowData();
+                console.log(self.taskIndex() + "::::" + self.rowIndex());
+                if (self.taskIndex() === null) {
+                    return;
+                }
+                let secondRowTasks = requirementsRowData[self.rowIndex()].tasks;
                 secondRowTasks.splice(self.taskIndex(), 1);
-                self.taskRowData(data);
+                self.requirementsRowData(requirementsRowData);
             };
 
+
+            self.modifyTask= () => {
+                console.log(self.newEndTime() + ">>>>>>>>>>>>" + self.newEndTime())
+
+                console.log(self.newRequirementName() + ":::::" + self.newTaskName())
+
+                console.log(self.requirementsRowData())
+
+                let requirements =  self.requirementsRowData();
+                let tasks = requirements[self.rowIndex()].tasks;
+                let selectedTask = tasks[self.taskIndex()] ;
+
+                selectedTask.begin = self.newStartTime();
+                selectedTask.finish = self.newEndTime();
+                selectedTask.name = self.newTaskName();
+                selectedTask.status = "normal";
+                selectedTask.progress = 1;
+                selectedTask.user = app.userLogin();
+
+                tasks.splice(self.taskIndex(), 1, selectedTask);
+                requirements.splice(self.rowIndex(), 1, tasks);
+
+                self.requirementsRowData().splice(self.rowIndex(), 1, tasks);
+
+                console.log(self.requirementsRowData());
+                document.getElementById('modifyTaskDialog').close();
+            };
 
 
             function loadTasks() {
                 customersApis.fetchTasks().then(function(data) {
-                    self.taskRowData(data);
+                    self.requirementsRowData(data);
                 }).catch(function(response) {
                     app.pushMessage("error", "Error fetching details", "");
                 });
@@ -350,46 +408,6 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
                 });
             }
 
-
-            // self.tasksUrl = "http://localhost:3000/project/tasks";
-            // self.loadTasksData = function () {
-            //     fetch(self.tasksUrl)
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             self.rowData(data);
-            //         })
-            //         .catch((error) => {
-            //             console.log("=========");
-            //             self.rowData(JSON.parse(mockData));
-            //             self.dataProvider = new ArrayDataProvider(self.rowData, {
-            //                 keyAttributes: 'resource'
-            //             });
-            //     });
-            // }
-
-            // self.weeksUrl = "http://localhost:3000/weeks";
-            // self.loadWeeksData = function () {
-            //     fetch(self.weeksUrl)
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             self.rowData(data);
-            //         })
-            //         .catch((error) => {
-            //             console.log("=========");
-            //         });
-            // }
-
-            // self.daysUrl = "http://localhost:3000/days";
-            // self.loadDaysData = function () {
-            //     fetch(self.daysUrl)
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             self.rowData(data);
-            //         })
-            //         .catch((error) => {
-            //             console.log("=========");
-            //         });
-            // }
 
             /**
              * Optional ViewModel method invoked after the View is inserted into the
@@ -425,7 +443,7 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
 
         /*
          * Returns an instance of the ViewModel providing one instance of the ViewModel. If needed,
-         * return a constructor for the ViewModel so that the ViewModel is constructed
+         * return a letructor for the ViewModel so that the ViewModel is letructed
          * each time the view is displayed.
          */
         return CustomerViewModel;
