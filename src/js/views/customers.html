@@ -100,7 +100,7 @@
         </oj-menu>
     </oj-gantt>
 
-    <oj-dialog id="createTaskDialog" dialog-title="Modal Dialog" aria-describedby="desc">
+    <oj-dialog id="createTaskDialog" dialog-title="创建任务" aria-describedby="desc">
         <div slot="body">
             <oj-form-layout max-columns="3" direction="row" class="oj-sm-padding-2x-bottom">
                 <oj-label>需求名称</oj-label>
@@ -117,20 +117,22 @@
             </oj-form-layout>
         </div>
         <div slot="footer">
-            <oj-button id="okButton" on-oj-action="[[addTask]]">OK</oj-button>
+            <oj-button id="createTaskDialog" on-oj-action="[[closeDialog]]">关闭</oj-button>
+            <oj-button id="okButton" on-oj-action="[[addTask]]">确定</oj-button>
         </div>
     </oj-dialog>
 
-    <oj-dialog id="modifyTaskDialog" dialog-title="Modal Dialog" aria-describedby="desc">
+    <oj-dialog id="modifyTaskDialog" dialog-title="修改任务" aria-describedby="desc">
         <div slot="body">
             <oj-form-layout max-columns="3" direction="row" class="oj-sm-padding-2x-bottom">
-                <oj-input-text required="true" label-hint="required"></oj-input-text>
+                <oj-input-text required="true" label-hint="required" value="{{newTaskName}}"></oj-input-text>
                 <oj-input-date id="start-date" required="true" label-hint="required" value="{{newStartTime}}"></oj-input-date>
                 <oj-input-date id="end-date" required="true" label-hint="required"  value="{{newEndTime}}"></oj-input-date>
             </oj-form-layout>
         </div>
         <div slot="footer">
-            <oj-button id="okButton" on-oj-action="[[modifyTask]]">OK</oj-button>
+            <oj-button id="modifyTaskDialog" on-oj-action="[[closeDialog]]">关闭</oj-button>
+            <oj-button id="okButton" on-oj-action="[[modifyTask]]">确定</oj-button>
         </div>
     </oj-dialog>
 </div>

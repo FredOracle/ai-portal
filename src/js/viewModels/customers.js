@@ -285,11 +285,12 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
                     let tasks = requirements[self.rowIndex()].tasks;
                     let selectedTask = tasks[self.taskIndex()] ;
 
-                    console.log(selectedTask.finish + "::::::   " + selectedTask.begin)
+                    console.log(selectedTask.finish + "::::::   " + selectedTask.begin + " ::::  " + selectedTask.name)
 
                     let newTaskStartTime = new Date(selectedTask.begin);
                     let newTaskEndTime = new Date(selectedTask.finish);
 
+                    self.newTaskName(selectedTask.name);
                     self.newStartTime(newTaskStartTime.toISOString());
                     self.newEndTime(newTaskEndTime.toISOString());
                     document.getElementById('modifyTaskDialog').open();
@@ -391,6 +392,11 @@ define(['../accUtils', 'services/customers/customersApis', 'appController',"requ
                 document.getElementById('modifyTaskDialog').close();
             };
 
+
+            self.closeDialog = function (event) {
+                console.log(event.currentTarget.id)
+                document.getElementById(event.currentTarget.id).close();
+            }
 
             function loadTasks() {
                 customersApis.fetchTasks().then(function(data) {
